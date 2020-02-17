@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/routes.dart';
+import 'package:my_app/wrapper.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.lightGreen,
       ),
-      routes: routes,
+      home: Wrapper(),
     );
   }
 }

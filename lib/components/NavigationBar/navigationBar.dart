@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/routes.dart';
 
 class NavigationBar extends StatefulWidget {
   NavigationBar({Key key}) : super(key: key);
@@ -11,6 +12,8 @@ class _NavigationBarState extends State<NavigationBar> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
+    String routeName = (routes.keys.toList()[index]);
+    Navigator.pushNamed(context, routeName);
     setState(() {
       _selectedIndex = index;
     });
