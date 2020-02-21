@@ -1,15 +1,44 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/tweet.dart';
 import 'package:share/share.dart';
+import 'package:http/http.dart' as http;
 
-class ItemList extends StatelessWidget {
+class ItemList extends StatefulWidget {
+  ItemList({Key key}) : super(key: key);
+
+  @override
+  _ItemListState createState() => _ItemListState();
+}
+
+class _ItemListState extends State<ItemList> {
+  List<Tweet> _tweets = [];
+  Future loadMessages() async {
+    var response = await http.get('http://localhost:3000/twitter');
+    if (response.statusCode == 200) {
+      String content = response.body;
+      List collection = json.decode(content)['data'];
+      List<Tweet> items =
+          collection.map((json) => Tweet.fromJson(json)).toList();
+
+      setState(() {
+        _tweets = items;
+      });
+    }
+  }
+
+  void initState() {
+    loadMessages();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: tweets.length,
+        itemCount: _tweets.length,
         itemBuilder: (context, i) {
-          Tweet tweet = tweets[i];
+          Tweet tweet = _tweets[i];
           return ListTile(
               contentPadding: EdgeInsets.all(15.0),
               leading: CircleAvatar(
