@@ -13,6 +13,8 @@ class ItemList extends StatefulWidget {
 
 class _ItemListState extends State<ItemList> {
   List<Tweet> _tweets = [];
+  bool _loading = true;
+
   Future loadMessages() async {
     var response = await http.get('http://localhost:3000/twitter');
     if (response.statusCode == 200) {
@@ -23,6 +25,7 @@ class _ItemListState extends State<ItemList> {
 
       setState(() {
         _tweets = items;
+        _loading = false;
       });
     }
   }
@@ -35,9 +38,14 @@ class _ItemListState extends State<ItemList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: _tweets.length,
+        padding: _loading ? EdgeInsets.all(0) : EdgeInsets.all(16.0),
+        itemCount: _loading ? 1 : _tweets.length,
         itemBuilder: (context, i) {
+          if (_loading) {
+            return LinearProgressIndicator(
+              backgroundColor: Colors.blue[200],
+            );
+          }
           Tweet tweet = _tweets[i];
           return ListTile(
               contentPadding: EdgeInsets.all(15.0),
